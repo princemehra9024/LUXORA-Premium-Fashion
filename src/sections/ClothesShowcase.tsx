@@ -3,6 +3,9 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { allProducts } from '@/data/products';
 
+// Check if user is on mobile to disable heavy parallax
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
 const ClothesShowcase = () => {
   const displayProducts = allProducts.slice(0, 4);
   const sectionRef = useRef<HTMLElement>(null);
@@ -12,11 +15,12 @@ const ClothesShowcase = () => {
     offset: ["start end", "end start"]
   });
 
-  // Different translation speeds for each card to create an ultra-smooth parallax effect
-  const y1 = useTransform(scrollYProgress, [0, 1], [150, -150]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [300, -300]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const y4 = useTransform(scrollYProgress, [0, 1], [400, -400]);
+  // Reduce parallax intensity on mobile devices to prevent lag
+  const range = isMobile ? 30 : 150;
+  const y1 = useTransform(scrollYProgress, [0, 1], [range, -range]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [range * 2, -range * 2]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [range * 0.7, -range * 0.7]);
+  const y4 = useTransform(scrollYProgress, [0, 1], [range * 2.5, -range * 2.5]);
 
   const transforms = [y1, y2, y3, y4];
 
@@ -46,6 +50,10 @@ const ClothesShowcase = () => {
               key={product.id} 
               className="group relative"
               style={{ y: transforms[index] }}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, delay: index * 0.1 }}
             >
               <Link to={`/shop?product=${product.id}`}>
                 <div className={`relative overflow-hidden rounded-2xl border transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-[0_0_30px_rgba(103,39,170,0.3)] bg-white/5 border-white/10`}>
@@ -56,7 +64,7 @@ const ClothesShowcase = () => {
                       loading="lazy"
                       decoding="async"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      style={{ willChange: 'transform' }}
+                      style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
                     />
                   </div>
                   <div className="p-5 backdrop-blur-md bg-black/40">

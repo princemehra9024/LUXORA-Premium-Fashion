@@ -14,41 +14,28 @@ const WebGLBackground = () => {
         }`}
       />
 
-      {/* Animated gradient orbs */}
+      {/* Animated gradient orbs - Optimized (Reduced count and blur) */}
       <div
-        className="absolute w-[600px] h-[600px] rounded-full blur-[120px] animate-aurora opacity-20"
+        className="absolute w-[500px] h-[500px] rounded-full blur-[80px] animate-aurora opacity-15"
         style={{
           background: theme === 'dark'
-            ? 'radial-gradient(circle, rgba(103,39,170,0.6) 0%, transparent 70%)'
-            : 'radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%)',
-          top: 'calc(-10% + var(--scroll-progress) * 10%)',
-          left: '10%',
+            ? 'radial-gradient(circle, rgba(103,39,170,0.5) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)',
+          top: 'calc(-5% + var(--scroll-progress) * 10%)',
+          left: '15%',
           willChange: 'transform, top',
         }}
       />
       <div
-        className="absolute w-[500px] h-[500px] rounded-full blur-[100px] opacity-15"
+        className="absolute w-[400px] h-[400px] rounded-full blur-[70px] opacity-10"
         style={{
           background: theme === 'dark'
-            ? 'radial-gradient(circle, rgba(244,63,94,0.5) 0%, transparent 70%)'
-            : 'radial-gradient(circle, rgba(244,63,94,0.2) 0%, transparent 70%)',
-          bottom: 'calc(-5% + var(--scroll-progress) * 5%)',
-          right: '5%',
+            ? 'radial-gradient(circle, rgba(244,63,94,0.4) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(244,63,94,0.15) 0%, transparent 70%)',
+          bottom: 'calc(0% + var(--scroll-progress) * 5%)',
+          right: '8%',
           animation: 'aurora 25s ease-in-out infinite reverse',
           willChange: 'transform, bottom',
-        }}
-      />
-      <div
-        className="absolute w-[400px] h-[400px] rounded-full blur-[80px] opacity-10"
-        style={{
-          background: theme === 'dark'
-            ? 'radial-gradient(circle, rgba(255,203,77,0.4) 0%, transparent 70%)'
-            : 'radial-gradient(circle, rgba(255,203,77,0.15) 0%, transparent 70%)',
-          top: '40%',
-          left: '50%',
-          transform: 'translate(-50%, calc(var(--scroll-progress) * 80px))',
-          animation: 'aurora 30s ease-in-out infinite',
-          willChange: 'transform',
         }}
       />
 
@@ -65,8 +52,8 @@ const WebGLBackground = () => {
         }}
       />
 
-      {/* Floating fashion elements - subtle diagonal lines like fabric patterns */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Floating fashion elements - subtle diagonal lines like fabric patterns - Desktop Only */}
+      <div className="absolute inset-0 overflow-hidden hidden lg:block">
         {/* Thread line 1 */}
         <div
           className="absolute w-[1px] h-[300px] opacity-[0.06] rotate-[25deg]"

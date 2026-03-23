@@ -55,9 +55,15 @@ const AppContent = () => {
       cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
         const scrollTop = window.scrollY;
+        // Optimization: Only update if scroll position changed significantly (every 2px)
+        const lastScroll = parseFloat(document.documentElement.style.getPropertyValue('--scroll-top') || '0');
+        if (Math.abs(scrollTop - lastScroll) < 2) return;
+        
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         const progress = docHeight > 0 ? scrollTop / docHeight : 0;
-        document.documentElement.style.setProperty('--scroll-progress', progress.toFixed(4));
+        
+        document.documentElement.style.setProperty('--scroll-progress', progress.toFixed(3));
+        document.documentElement.style.setProperty('--scroll-top', scrollTop.toString());
       });
     };
 

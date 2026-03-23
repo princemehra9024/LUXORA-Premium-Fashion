@@ -13,9 +13,8 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('theme') as Theme;
+      const saved = localStorage.getItem('luxora-theme') as Theme;
       if (saved) return saved;
-      // Default to light as requested
       return 'light';
     }
     return 'light';
@@ -25,7 +24,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const root = document.documentElement;
     root.classList.remove('dark', 'light');
     root.classList.add(theme);
-    localStorage.setItem('theme', theme);
+    localStorage.setItem('luxora-theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {

@@ -82,6 +82,21 @@
     font-family: 'Open Sans', sans-serif;
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
+    /* Improves scroll momentum on iOS Safari */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent text size adjustment on orientation change */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Mobile performance: enable GPU compositing on animated elements */
+  section, [class*="motion"] {
+    transform: translateZ(0);
+  }
+
+  /* Improve touch responsiveness */
+  a, button {
+    touch-action: manipulation;
   }
   
   h1, h2, h3, h4, h5, h6 {

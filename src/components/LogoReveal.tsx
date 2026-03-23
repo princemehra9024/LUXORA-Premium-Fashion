@@ -55,7 +55,7 @@ const LogoReveal = ({ onComplete }: LogoRevealProps) => {
         rotation: 0,
         opacity: 1,
         filter: 'blur(0px)',
-        duration: 1.5,
+        duration: 0.8,
         ease: 'expo.out',
       });
       
@@ -65,34 +65,34 @@ const LogoReveal = ({ onComplete }: LogoRevealProps) => {
           opacity: 1,
           rotateX: 0,
           filter: 'blur(0px)',
-          duration: 1.2,
-          stagger: 0.05,
+          duration: 0.7,
+          stagger: 0.04,
           ease: 'expo.out',
-        }, '-=1.0');
+        }, '-=0.6');
       }
       
       tl.to(taglineRef.current, {
         opacity: 1,
         y: 0,
         letterSpacing: '0.3em',
-        duration: 2.0,
+        duration: 0.8,
         ease: 'power3.out',
-      }, '-=1.2')
+      }, '-=0.6')
       .to(logoRef.current, {
         boxShadow: theme === 'dark' 
           ? '0 0 60px rgba(168, 85, 247, 0.4)' 
           : '0 0 60px rgba(103, 39, 170, 0.2)',
-        duration: 1.0,
+        duration: 0.5,
         yoyo: true,
         repeat: 1,
         ease: 'sine.inOut',
-      }, '-=0.5')
+      }, '-=0.3')
       .to(containerRef.current, {
         opacity: 0,
         scale: 1.05,
-        duration: 1.2,
+        duration: 0.8,
         ease: 'expo.inOut',
-        delay: 0.8,
+        delay: 0.3,
       });
     }, containerRef);
 

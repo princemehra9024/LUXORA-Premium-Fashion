@@ -56,19 +56,6 @@ const PremiumProductCard = ({
           : 'bg-white border-gray-100 shadow-xl hover:border-purple-500/30'
       }`}
     >
-      {/* Premium Badge */}
-      <div className="absolute top-6 left-6 z-30">
-        <span className={`px-5 py-2 text-white text-[10px] font-black tracking-[0.2em] rounded-full uppercase shadow-xl ${
-          accentColor === 'rose' 
-            ? 'bg-gradient-to-r from-rose-600 to-pink-600 shadow-rose-900/40' 
-            : accentColor === 'amber'
-              ? 'bg-gradient-to-r from-amber-500 to-orange-500 shadow-amber-900/40'
-              : 'bg-gradient-to-r from-purple-600 to-indigo-600 shadow-purple-900/40'
-        }`}>
-          Limited Edition
-        </span>
-      </div>
-
       {/* Image Slider Section */}
       <div className="relative w-full md:w-1/2 aspect-[4/5] overflow-hidden">
         <AnimatePresence mode="wait">
@@ -155,7 +142,7 @@ const PremiumProductCard = ({
         <motion.p 
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}
-          className={`text-xs font-bold tracking-[0.3em] uppercase mb-4 ${
+          className={`text-sm font-black tracking-[0.4em] uppercase mb-4 ${
             accentColor === 'rose' ? 'text-rose-400' : accentColor === 'amber' ? 'text-amber-400' : 'text-purple-400'
           }`}
         >
@@ -166,7 +153,7 @@ const PremiumProductCard = ({
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className={`text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6 ${
+          className={`text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 ${
             theme === 'dark' ? 'text-white' : 'text-gray-900'
           }`}
           style={{ fontFamily: 'Teko, sans-serif' }}

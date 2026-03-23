@@ -9,30 +9,24 @@ interface SketchfabModelProps {
 
 /**
  * SketchfabModel — embeds a public Sketchfab 3D model via their Viewer API iframe.
- *
- * Model IDs that work well for fashion/male mannequin:
- * - "1b3fdce74abe4b85b7d0cd2a4f7e1c74" — Male Anatomy / Body
- * - "f5e51bf1badf434a93b5d95a817fb68b" — Male character
- * - "7b39ed4c8a674965a8e73e73a9bde7d1" — Stylized Man
- *
- * Sketchfab Viewer API docs: https://sketchfab.com/developers/viewer
+ * Loads immediately (no lazy/in-view delay) for maximum speed.
  */
 const SketchfabModel = ({
-  // Verified model from Sketchfab API (574K views, 8K likes, high quality PBR human character)
   modelId = '96340701c2ed4d37851c7d9109eee9c0',
   className = '',
   onLoad: externalOnLoad,
   theme = 'dark',
 }: SketchfabModelProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
 
-  // Build Sketchfab Viewer API embed URL with all UI stripped
+  // Optimized Sketchfab embed URL — all unnecessary UI stripped, max performance params
   const params = new URLSearchParams({
-    autostart: '1',
-    autospin: '0',
+    autostart: '1',        // Start immediately, don't wait for user click
+    autospin: '0',         // No auto rotation (saves GPU)
     ui_theme: theme,
-    ui_controls: '0',
+    ui_controls: '0',      // Hide all controls
     ui_infos: '0',
     ui_inspector: '0',
     ui_stop: '0',
@@ -43,39 +37,32 @@ const SketchfabModel = ({
     ui_fullscreen: '0',
     ui_annotations: '0',
     ui_watermark: '0',
-    transparent: '1',
+    transparent: '1',      // Transparent background
     camera: '0',
-    preload: '1',
+    preload: '1',          // Preload model data aggressively
+    dnt: '1',              // Do Not Track — removes analytics overhead
+    double_click: '0',     // Disable double click to enter fullscreen
+    scrollwheel: '0',      // Disable scroll wheel zoom (no accidental page hijack)
+    fps_speed: '1',        // Normal speed, less GPU
   });
 
   const embedUrl = `https://sketchfab.com/models/${modelId}/embed?${params.toString()}`;
 
   return (
-    <div className={`relative w-full h-full ${className}`}>
-      {/* Loading state */}
-      {!loaded && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
-          <div className="relative w-20 h-20 mb-6">
-            <div className="absolute inset-0 rounded-full border-2 border-purple-500/30 animate-ping" />
-            <div className="absolute inset-2 rounded-full border-2 border-purple-500 border-t-transparent animate-spin" />
-          </div>
-          <p className="text-purple-400 text-xs tracking-[0.4em] uppercase">Loading 3D Model</p>
-        </div>
-      )}
-
-      {/* Sketchfab Viewer iframe */}
+    <div ref={containerRef} className={`relative w-full h-full ${className}`}>
+      {/* Sketchfab Viewer iframe - Loads immediately on mount for maximum speed */}
       <iframe
         ref={iframeRef}
         title="Interactive 3D Fashion Model"
         src={embedUrl}
         frameBorder="0"
         allow="autoplay; fullscreen; xr-spatial-tracking"
-        loading="eager"
         onLoad={() => {
           setLoaded(true);
           if (externalOnLoad) externalOnLoad();
         }}
-        className={`w-full h-full border-0 transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`w-full h-full border-0 transition-opacity duration-1000 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        style={{ display: 'block' }}
       />
     </div>
   );

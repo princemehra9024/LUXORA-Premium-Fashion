@@ -7,15 +7,11 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { allProducts } from '@/data/products';
 import { Link } from 'react-router-dom';
 import Marquee from '@/components/Marquee';
-import FlashSale from '@/sections/FlashSale';
-import TrustBadges from '@/sections/TrustBadges';
 import ProductFeatureSlider from '@/components/ProductFeatureSlider';
 import { motion } from 'framer-motion';
 import { lazy, Suspense } from 'react';
 import SketchfabModel from '@/components/SketchfabModel';
-import FeaturedCollection from '@/sections/FeaturedCollection';
-import ProductMarquee from '@/components/ProductMarquee';
-import ReviewMarquee from '@/components/ReviewMarquee';
+import ModelLoader from '@/components/ModelLoader';
 import PremiumProductCard from '@/components/PremiumProductCard';
 import { Spinner } from '@/components/ui/spinner';
 
@@ -26,12 +22,22 @@ const ProductTabs = lazy(() => import('@/sections/ProductTabs'));
 const BrandStory = lazy(() => import('@/sections/BrandStory'));
 const Newsletter = lazy(() => import('@/sections/Newsletter'));
 const ClothesShowcase = lazy(() => import('@/sections/ClothesShowcase'));
+const FlashSale = lazy(() => import('@/sections/FlashSale'));
+const FeaturedCollection = lazy(() => import('@/sections/FeaturedCollection'));
+const ProductMarquee = lazy(() => import('@/components/ProductMarquee'));
+const ReviewMarquee = lazy(() => import('@/components/ReviewMarquee'));
+const TrustBadges = lazy(() => import('@/sections/TrustBadges'));
 
-const SectionLoader = () => (
-  <div className="py-20 flex items-center justify-center bg-black">
-    <Spinner className="size-10 text-purple-500" />
-  </div>
-);
+const SectionLoader = () => {
+  const { theme } = useTheme();
+  return (
+    <div className={`py-20 flex items-center justify-center transition-colors duration-300 ${
+      theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f8f7ff]'
+    }`}>
+      <Spinner className="size-10 text-purple-500" />
+    </div>
+  );
+};
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,6 +46,20 @@ const HomePage = () => {
   const heroRef = useRef<HTMLElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
   const [modelLoaded, setModelLoaded] = useState(false);
+  // On mobile devices, skip loading the 3D model entirely for performance
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // On mobile, mark model as loaded immediately since we don't show it
+  useEffect(() => {
+    if (isMobile) setModelLoaded(true);
+  }, [isMobile]);
 
   // Find special product
   const specialProduct = allProducts.find(p => p.id === 'wd-3');
@@ -70,76 +90,74 @@ const HomePage = () => {
   return (
     <div className="relative overflow-hidden">
       {/* Hero Section */}
-      <section ref={heroRef} className="relative min-h-[95vh] flex items-center overflow-hidden theme-transition">
+      <section ref={heroRef} className="relative min-h-[100svh] flex items-center overflow-hidden theme-transition">
         {/* Theme-aware background */}
         <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f8f7ff]'}`} />
         
         {/* Premium Background Elements */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-           <div className={`absolute top-0 right-0 w-[800px] h-[800px] rounded-full blur-[150px] opacity-15 ${theme === 'dark' ? 'bg-purple-600' : 'bg-purple-200'}`} />
-           <div className={`absolute bottom-0 left-0 w-[600px] h-[600px] rounded-full blur-[120px] opacity-10 ${theme === 'dark' ? 'bg-blue-600' : 'bg-blue-100'}`} />
+           <div className={`absolute top-0 right-0 w-[300px] sm:w-[800px] h-[300px] sm:h-[800px] rounded-full blur-[80px] sm:blur-[150px] opacity-15 ${theme === 'dark' ? 'bg-purple-600' : 'bg-purple-200'}`} />
+           <div className={`absolute bottom-0 left-0 w-[200px] sm:w-[600px] h-[200px] sm:h-[600px] rounded-full blur-[60px] sm:blur-[120px] opacity-10 ${theme === 'dark' ? 'bg-blue-600' : 'bg-blue-100'}`} />
         </div>
 
-        {/* Sketchfab 3D Model */}
-        <div className="absolute inset-y-0 right-0 w-full lg:w-[65%] z-0">
-          {!modelLoaded && (
-            <div className={`absolute inset-0 animate-pulse flex items-center justify-center ${
-              theme === 'dark' ? 'bg-gradient-to-br from-gray-900 to-black' : 'bg-gradient-to-br from-purple-50 to-white'
-            }`}>
-              <div className="text-purple-500/20 text-9xl font-teko font-bold select-none italic tracking-tighter">LUXORA</div>
-            </div>
-          )}
+        {/* Sketchfab 3D Model - Shown on all devices. ModelLoader covers it until ready */}
+        <div className="absolute inset-y-0 right-0 w-full lg:w-[60%] z-0">
+          {/* ModelLoader overlay: shows LUXORA logo until 3D model is ready */}
+          <ModelLoader isLoaded={modelLoaded} />
 
           <SketchfabModel
             modelId="96340701c2ed4d37851c7d9109eee9c0"
             onLoad={() => setModelLoaded(true)}
             theme={theme}
-            className={`w-full h-full transition-opacity duration-1000 ${modelLoaded ? 'opacity-100' : 'opacity-0'}`}
+            className={`w-full h-full transition-opacity duration-[2000ms] ${modelLoaded ? 'opacity-100' : 'opacity-0'}`}
           />
-          <div className={`absolute inset-0 pointer-events-none bg-gradient-to-r ${
-            theme === 'dark' ? 'from-[#050505] via-[#050505]/20' : 'from-[#f8f7ff] via-[#f8f7ff]/20'
+          {/* Vignette: desktop only — on mobile it covers the model */}
+          <div className={`absolute inset-0 pointer-events-none hidden lg:block bg-gradient-to-r ${
+            theme === 'dark' ? 'from-[#050505] via-[#050505]/40' : 'from-[#f8f7ff] via-[#f8f7ff]/40'
           } to-transparent`} />
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 w-full px-6 sm:px-8 lg:px-16 xl:px-24 py-32 pointer-events-none">
-          <div ref={heroContentRef} className="max-w-3xl pointer-events-auto">
+        <div className="relative z-10 w-full px-5 sm:px-8 lg:px-16 xl:px-24 py-24 lg:py-32 pointer-events-none">
+          <div ref={heroContentRef} className="max-w-xl lg:max-w-3xl pointer-events-auto">
             <motion.div 
-               className="hero-animate inline-flex items-center gap-2 px-5 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 mb-8"
+               className="hero-animate relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 mb-6"
                whileHover={{ scale: 1.05 }}
             >
-               <Sparkles className="w-4 h-4 text-purple-500 animate-pulse" />
-               <span className="text-xs font-black tracking-[0.2em] text-purple-600 uppercase">Season 2024 Collection 26</span>
+               <Sparkles className="w-3 h-3 text-purple-500 animate-pulse" />
+               <span className="text-[9px] font-black tracking-[0.2em] text-purple-600 uppercase">Artisan Selection 2024</span>
             </motion.div>
             
             <h1 
-              className={`hero-animate text-7xl sm:text-8xl lg:text-9xl font-black leading-[0.8] mb-8 ${
+              className={`hero-animate relative text-5xl sm:text-7xl lg:text-9xl xl:text-[10rem] font-black leading-[0.85] mb-5 sm:mb-8 ${
                 theme === 'dark' ? 'text-white' : 'text-[#111111]'
               }`}
-              style={{ fontFamily: 'Teko, sans-serif' }}
+              style={{ 
+                fontFamily: 'Teko, sans-serif',
+                textShadow: theme === 'dark' ? '0 2px 20px rgba(0,0,0,0.5)' : '0 2px 10px rgba(248,247,255,0.8)'
+              }}
             >
               CRAFTED FOR <br />
               <span className="text-gradient">UNIQUENESS</span>
             </h1>
             
-            <p className={`hero-animate text-xl max-w-xl mb-12 leading-relaxed ${
-              theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+            <p className={`hero-animate relative text-base sm:text-xl max-w-sm sm:max-w-xl mb-8 sm:mb-12 leading-relaxed font-light ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
             }`}>
-              At Luxora, we believe every individual is a masterpiece. Discover our premium fashion 
-              line engineered for those who dare to be different.
+              At Luxora, every individual is a masterpiece. Discover our premium fashion line.
             </p>
             
-            <div className="hero-animate flex flex-wrap gap-8 items-center">
-              <Link to="/shop">
+            <div className="hero-animate relative flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-8 items-start sm:items-center">
+              <Link to="/shop" className="w-full sm:w-auto">
                 <Button
-                  size="lg"
-                  className="group bg-white text-black hover:bg-white/90 px-10 py-7 text-xs font-black tracking-widest uppercase rounded-full transition-all duration-300 shadow-[0_20px_40px_rgba(255,255,255,0.1)]"
+                  size="xl"
+                  className="w-full sm:w-auto group bg-purple-600 text-white hover:bg-purple-700 px-8 sm:px-12 py-5 sm:py-8 text-sm font-black tracking-widest uppercase rounded-full transition-all duration-500 shadow-[0_20px_60px_rgba(103,39,170,0.3)] hover:shadow-[0_25px_80px_rgba(103,39,170,0.5)] border-none"
                 >
                   <ShoppingBag className="w-5 h-5 mr-3" />
                   Explore Studio
                 </Button>
               </Link>
-              <div className="flex items-center gap-4 text-xs font-black tracking-[0.2em] uppercase text-purple-500 cursor-pointer group">
+              <div className="hidden sm:flex items-center gap-4 text-xs font-black tracking-[0.2em] uppercase text-purple-500 cursor-pointer group">
                 Summer Campaign
                 <div className="w-12 h-[1px] bg-purple-500 group-hover:w-24 transition-all" />
               </div>
@@ -149,7 +167,7 @@ const HomePage = () => {
       </section>
 
       {/* Scrolling Marquee */}
-      <Marquee text="LUXORA MASTERPIECES • FREE GLOBAL SHIPPING • ARTISANAL CRAFTSMANSHIP • LIMITED EDITION DROPS • 24/7 ELITE CONCIERGE • SECURE BIOMETRIC CHECKOUT" speed={1} />
+      <Marquee text="LUXORA MASTERPIECES • FREE GLOBAL SHIPPING • ARTISANAL CRAFTSMANSHIP • 24/7 ELITE CONCIERGE • SECURE BIOMETRIC CHECKOUT" speed={1} />
 
       {/* Masterpiece Showcase Section */}
       <section className="py-32 px-6 sm:px-8 lg:px-16 xl:px-24">
@@ -184,10 +202,14 @@ const HomePage = () => {
       </section>
 
       {/* Featured Collection */}
-      <FeaturedCollection />
+      <Suspense fallback={<SectionLoader />}>
+        <FeaturedCollection />
+      </Suspense>
 
       {/* Flash Sale Section */}
-      <FlashSale />
+      <Suspense fallback={<SectionLoader />}>
+        <FlashSale />
+      </Suspense>
 
       {/* Trending Products */}
       <Suspense fallback={<SectionLoader />}>
@@ -233,13 +255,19 @@ const HomePage = () => {
       </Suspense>
 
       {/* Reviews Marquee */}
-      <ReviewMarquee />
+      <Suspense fallback={<SectionLoader />}>
+        <ReviewMarquee />
+      </Suspense>
 
       {/* Trust Badges */}
-      <TrustBadges />
+      <Suspense fallback={<SectionLoader />}>
+        <TrustBadges />
+      </Suspense>
 
       {/* Product Marquee (Infinite Selection) */}
-      <ProductMarquee />
+      <Suspense fallback={<SectionLoader />}>
+        <ProductMarquee />
+      </Suspense>
 
       {/* Newsletter */}
       <Suspense fallback={<SectionLoader />}>

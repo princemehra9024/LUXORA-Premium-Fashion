@@ -2,15 +2,19 @@ import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { reviews } from '@/data/products';
 import { Star, Quote } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const ReviewMarquee = () => {
   const marqueeRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const marquee = marqueeRef.current;
     if (!marquee) return;
 
     const cards = Array.from(marquee.children);
+    if (cards.length === 0) return;
+    
     const totalWidth = cards.reduce((acc, card) => acc + (card as HTMLElement).offsetWidth + 24, 0);
 
     const clone = marquee.cloneNode(true) as HTMLDivElement;
@@ -41,9 +45,11 @@ const ReviewMarquee = () => {
   }, []);
 
   return (
-    <section className="py-24 overflow-hidden bg-black text-white">
+    <section className={`py-24 overflow-hidden transition-colors duration-500 ${
+      theme === 'dark' ? 'bg-[#050505] text-white' : 'bg-white text-[#111111]'
+    }`}>
       <div className="px-6 mb-16 text-center">
-        <p className="text-purple-400 text-sm tracking-[0.3em] font-medium mb-4 uppercase">Voice of Luxora</p>
+        <p className="text-purple-500 text-sm tracking-[0.3em] font-medium mb-4 uppercase">Voice of Luxora</p>
         <h2 
           className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight"
           style={{ fontFamily: 'Teko, sans-serif' }}
@@ -57,7 +63,11 @@ const ReviewMarquee = () => {
           {reviews.concat(reviews).map((review, idx) => (
             <div 
               key={`${review.id}-${idx}`}
-              className="flex-shrink-0 w-[350px] md:w-[450px] p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm group hover:border-purple-500/50 transition-all duration-500"
+              className={`flex-shrink-0 w-[350px] md:w-[450px] p-8 rounded-3xl border backdrop-blur-sm group transition-all duration-500 ${
+                theme === 'dark' 
+                  ? 'bg-white/5 border-white/10 hover:border-purple-500/50' 
+                  : 'bg-black/5 border-black/5 hover:border-purple-500/30 shadow-lg shadow-black/5'
+              }`}
             >
               <div className="flex items-center gap-4 mb-6">
                 <div className="relative">
@@ -76,18 +86,18 @@ const ReviewMarquee = () => {
                     {[...Array(5)].map((_, i) => (
                       <Star 
                         key={i} 
-                        className={`w-3 h-3 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-600'}`} 
+                        className={`w-3 h-3 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`} 
                       />
                     ))}
                   </div>
                 </div>
               </div>
-              <p className="text-gray-400 italic leading-relaxed text-lg">
+              <p className={`italic leading-relaxed text-lg ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                 "{review.comment}"
               </p>
-              <div className="mt-6 flex items-center justify-between opacity-50 text-xs tracking-widest uppercase">
+              <div className={`mt-6 flex items-center justify-between opacity-50 text-xs tracking-widest uppercase ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                 <span>{review.date}</span>
-                <span className="text-purple-400">Verified Purchase</span>
+                <span className="text-purple-500">Verified Purchase</span>
               </div>
             </div>
           ))}
