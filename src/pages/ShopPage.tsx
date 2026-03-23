@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { 
@@ -7,12 +7,8 @@ import {
   List, 
   ChevronDown, 
   X, 
-  ShoppingCart, 
-  Heart,
-  Star,
   SlidersHorizontal,
-  Sparkles,
-  ArrowRight
+  Sparkles
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { allProducts, categories } from '@/data/products';
@@ -32,7 +28,7 @@ const ShopPage = () => {
   const [, setCart] = useState<string[]>([]);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const heroRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
+  // const cardsRef = useRef<HTMLDivElement>(null);
 
   // Get category from URL
   useEffect(() => {
@@ -88,7 +84,7 @@ const ShopPage = () => {
     setWishlist(prev => 
       prev.includes(productId) 
         ? prev.filter(id => id !== productId)
-        : [...prev, id]
+        : [...prev, productId]
     );
   };
 

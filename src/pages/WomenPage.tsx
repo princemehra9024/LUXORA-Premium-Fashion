@@ -25,7 +25,7 @@ const WomenPage = () => {
   const { theme } = useTheme();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [sortBy, setSortBy] = useState<string>('featured');
-  const [showFilters, setShowFilters] = useState(false);
+  // const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [, setCart] = useState<string[]>([]);

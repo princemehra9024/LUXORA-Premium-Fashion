@@ -115,7 +115,7 @@ const Hero = () => {
           src="/hero-bg.jpg"
           alt="Fashion Hero"
           loading="eager"
-          fetchpriority="high"
+          fetchPriority="high"
           decoding="async"
           className="w-full h-full object-cover"
         />
