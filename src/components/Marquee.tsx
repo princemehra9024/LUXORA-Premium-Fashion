@@ -61,7 +61,7 @@ const Marquee = ({ text, speed = 1, direction = 'left' }: MarqueeProps) => {
           : 'bg-purple-50 border-purple-200 text-purple-800'
       }`}
     >
-      <div ref={textRef} className="inline-flex items-center gap-8 px-4 font-semibold text-xs sm:text-sm tracking-widest uppercase">
+      <div ref={textRef} className="inline-flex items-center gap-8 px-4 font-semibold text-xs sm:text-sm tracking-widest uppercase" style={{ willChange: 'transform' }}>
         {items.map((item, i) => (
           <div key={i} className="flex items-center gap-8">
             <span>{item}</span>

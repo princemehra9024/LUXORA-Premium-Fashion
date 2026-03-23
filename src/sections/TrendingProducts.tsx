@@ -110,6 +110,7 @@ const TrendingProducts = () => {
               className={`trending-card group relative ${
                 index % 2 === 1 ? 'lg:mt-16' : ''
               }`}
+              style={{ willChange: 'transform, opacity' }}
             >
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-white/5 to-transparent border border-white/10 transition-all duration-500 group-hover:border-purple-500/50 group-hover:shadow-[0_0_50px_rgba(103,39,170,0.3)]">
                 {/* Image */}

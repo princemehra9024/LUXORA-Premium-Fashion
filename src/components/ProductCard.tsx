@@ -67,6 +67,8 @@ const ProductCard = ({
           <motion.img
             src={product.image}
             alt={product.name}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover"
             whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.6 }}
@@ -147,6 +149,7 @@ const ProductCard = ({
   return (
     <motion.div
       ref={cardRef}
+      style={{ willChange: 'transform, opacity' }}
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
@@ -168,6 +171,8 @@ const ProductCard = ({
         <motion.img
           src={product.image}
           alt={product.name}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover"
           whileHover={{ scale: 1.08 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
