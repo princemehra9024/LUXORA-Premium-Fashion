@@ -70,13 +70,12 @@ const SketchfabModel = ({
         src={embedUrl}
         frameBorder="0"
         allow="autoplay; fullscreen; xr-spatial-tracking"
-        loading="lazy"
+        loading="eager"
         onLoad={() => {
           setLoaded(true);
           if (externalOnLoad) externalOnLoad();
         }}
-        className="w-full h-full border-0"
-        style={{ display: loaded ? 'block' : 'none' }}
+        className={`w-full h-full border-0 transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
       />
     </div>
   );
