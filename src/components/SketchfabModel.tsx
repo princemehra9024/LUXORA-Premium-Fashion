@@ -70,7 +70,7 @@ const SketchfabModel = ({
         src={embedUrl}
         frameBorder="0"
         allow="autoplay; fullscreen; xr-spatial-tracking"
-        loading="eager"
+        loading="lazy"
         onLoad={() => {
           setLoaded(true);
           if (externalOnLoad) externalOnLoad();

@@ -50,18 +50,23 @@ const AppContent = () => {
   useLenis();
 
   useEffect(() => {
-    // Track scroll progress using CSS variables for high-performance background updates
+    let rafId: number;
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = scrollTop / docHeight;
-      document.documentElement.style.setProperty('--scroll-progress', progress.toString());
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+        document.documentElement.style.setProperty('--scroll-progress', progress.toFixed(4));
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    // Initialize
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   useEffect(() => {

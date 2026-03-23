@@ -23,6 +23,7 @@ const WebGLBackground = () => {
             : 'radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%)',
           top: 'calc(-10% + var(--scroll-progress) * 10%)',
           left: '10%',
+          willChange: 'transform, top',
         }}
       />
       <div
@@ -34,6 +35,7 @@ const WebGLBackground = () => {
           bottom: 'calc(-5% + var(--scroll-progress) * 5%)',
           right: '5%',
           animation: 'aurora 25s ease-in-out infinite reverse',
+          willChange: 'transform, bottom',
         }}
       />
       <div
@@ -46,6 +48,7 @@ const WebGLBackground = () => {
           left: '50%',
           transform: 'translate(-50%, calc(var(--scroll-progress) * 80px))',
           animation: 'aurora 30s ease-in-out infinite',
+          willChange: 'transform',
         }}
       />
 
@@ -74,6 +77,7 @@ const WebGLBackground = () => {
             top: '10%',
             left: '20%',
             animation: 'float-thread 12s ease-in-out infinite',
+            willChange: 'transform',
           }}
         />
         {/* Thread line 2 */}
