@@ -96,7 +96,7 @@ const AboutPage = () => {
       {/* Hero */}
       <div ref={heroRef} className="relative py-24 lg:py-32 overflow-hidden">
         <div className="absolute inset-0">
-          <img
+          <img loading="lazy"
             src={theme === 'dark' ? '/hero-bg.jpg' : '/hero-bg-light.jpg'}
             alt="About Background"
             className="w-full h-full object-cover opacity-30"
@@ -249,7 +249,7 @@ const AboutPage = () => {
                     : 'bg-white border-gray-200 shadow-lg'
                 }`}
               >
-                <img
+                <img loading="lazy"
                   src={member.image}
                   alt={member.name}
                   className="w-32 h-32 rounded-full mx-auto mb-6 object-cover border-4 border-purple-600/30"

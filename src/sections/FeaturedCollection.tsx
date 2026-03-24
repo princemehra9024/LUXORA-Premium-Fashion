@@ -155,7 +155,7 @@ const FeaturedCollection = () => {
             <div className="absolute top-8 left-8 z-20">
               <span className="px-4 py-2 bg-yellow-500 text-black text-xs font-black tracking-widest rounded-sm shadow-xl">BESTSELLER</span>
             </div>
-            <img 
+            <img loading="lazy" 
               src={leftProduct.image} 
               alt={leftProduct.name} 
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
@@ -191,7 +191,7 @@ const FeaturedCollection = () => {
                 <div className="absolute -bottom-8 right-0 z-20">
                   <span className="px-4 py-2 bg-purple-600 text-white text-xs font-black tracking-widest rounded-sm shadow-xl">ESSENTIALS</span>
                 </div>
-                <img 
+                <img loading="lazy" 
                   src={rightProduct.image} 
                   alt={rightProduct.name} 
                   className="w-full aspect-[4/5] object-cover rounded-2xl shadow-2xl transition-all duration-700 group-hover:rotate-1"

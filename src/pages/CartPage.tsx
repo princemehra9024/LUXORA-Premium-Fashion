@@ -53,7 +53,7 @@ const CartPage = () => {
                   }`}
                 >
                   <Link to={`/product/${product.id}`} className="shrink-0">
-                    <img 
+                    <img loading="lazy" 
                       src={product.image} 
                       alt={product.name} 
                       className="w-24 h-32 object-cover rounded-xl"

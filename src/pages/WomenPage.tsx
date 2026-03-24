@@ -109,7 +109,7 @@ const WomenPage = () => {
       {/* Premium Hero Section */}
       <section ref={heroRef} className="relative h-[80vh] min-h-[600px] flex items-center overflow-hidden border-b border-rose-100/10">
         <div className="absolute inset-0">
-          <img
+          <img loading="lazy"
             src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920&h=1080&fit=crop"
             alt="Women's Fashion"
             className="women-hero-img w-full h-full object-cover scale-110"
@@ -246,7 +246,7 @@ const WomenPage = () => {
             className="women-feature-item md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-[3rem] border border-white/5"
             whileHover={{ y: -10 }}
           >
-            <img 
+            <img loading="lazy" 
               src={womenCategories[0]?.image || "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&fit=crop"} 
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
               alt="Category"
@@ -270,7 +270,7 @@ const WomenPage = () => {
             className="women-feature-item md:col-span-1 md:row-span-1 relative group overflow-hidden rounded-[3rem] border border-white/5"
             whileHover={{ y: -5 }}
           >
-            <img src={womenCategories[1]?.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Category" />
+            <img loading="lazy" src={womenCategories[1]?.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Category" />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-500" />
             <div className="absolute bottom-10 left-10">
               <h3 className="text-3xl font-black text-white uppercase" style={{ fontFamily: 'Teko, sans-serif' }}>{womenCategories[1]?.name}</h3>
@@ -283,7 +283,7 @@ const WomenPage = () => {
             className="women-feature-item md:col-span-1 md:row-span-1 relative group overflow-hidden rounded-[3rem] border border-white/5 shadow-2xl"
             whileHover={{ y: -5 }}
           >
-            <img src={womenCategories[2]?.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Category" />
+            <img loading="lazy" src={womenCategories[2]?.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Category" />
             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-500" />
             <div className="absolute bottom-10 left-10">
               <h3 className="text-3xl font-black text-white uppercase" style={{ fontFamily: 'Teko, sans-serif' }}>{womenCategories[2]?.name}</h3>
@@ -296,7 +296,7 @@ const WomenPage = () => {
             className="women-feature-item md:col-span-2 md:row-span-1 relative group overflow-hidden rounded-[3rem] border border-white/5"
             whileHover={{ y: -5 }}
           >
-            <img src={womenCategories[3]?.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Category" />
+            <img loading="lazy" src={womenCategories[3]?.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Category" />
             <div className="absolute inset-0 bg-gradient-to-r from-rose-900/60 to-transparent" />
             <div className="absolute left-12 top-1/2 -translate-y-1/2">
                <div className="flex items-center gap-3 mb-4">
@@ -448,7 +448,7 @@ const WomenPage = () => {
       {/* Visual Identity Break */}
       <section className="py-32 px-6 sm:px-8 lg:px-16 xl:px-24">
         <div className="relative h-[650px] rounded-[5rem] overflow-hidden border border-white/5 group shadow-2xl">
-           <img 
+           <img loading="lazy" 
             src="https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=1600&h=800&fit=crop" 
             className="w-full h-full object-cover grayscale brightness-[0.3] group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-1500 ease-out" 
             alt="Visual Break"

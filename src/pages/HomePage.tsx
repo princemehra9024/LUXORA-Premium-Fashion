@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ShoppingBag, Sparkles } from 'lucide-react';
+import { ShoppingBag, Truck, RefreshCw, Award, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
 import { allProducts } from '@/data/products';
@@ -10,8 +10,6 @@ import Marquee from '@/components/Marquee';
 import ProductFeatureSlider from '@/components/ProductFeatureSlider';
 import { motion } from 'framer-motion';
 import { lazy, Suspense } from 'react';
-import SketchfabModel from '@/components/SketchfabModel';
-import ModelLoader from '@/components/ModelLoader';
 import PremiumProductCard from '@/components/PremiumProductCard';
 import { Spinner } from '@/components/ui/spinner';
 
@@ -27,6 +25,7 @@ const FeaturedCollection = lazy(() => import('@/sections/FeaturedCollection'));
 const ProductMarquee = lazy(() => import('@/components/ProductMarquee'));
 const ReviewMarquee = lazy(() => import('@/components/ReviewMarquee'));
 const TrustBadges = lazy(() => import('@/sections/TrustBadges'));
+const InteractiveModel = lazy(() => import('@/sections/InteractiveModel'));
 
 const SectionLoader = () => {
   const { theme } = useTheme();
@@ -45,8 +44,7 @@ const HomePage = () => {
   const { theme } = useTheme();
   const heroRef = useRef<HTMLElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
-  const [modelLoaded, setModelLoaded] = useState(false);
-  // On mobile devices, skip loading the 3D model entirely for performance
+  // On mobile devices, check resize
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -55,11 +53,6 @@ const HomePage = () => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // On mobile, mark model as loaded immediately since we don't show it
-  useEffect(() => {
-    if (isMobile) setModelLoaded(true);
-  }, [isMobile]);
 
   // Find special product
   const specialProduct = allProducts.find(p => p.id === 'wd-3');
@@ -87,87 +80,138 @@ const HomePage = () => {
     return () => ctx.revert();
   }, []);
 
+  const benefits = [
+    { icon: Truck, label: 'Free Shipping', sub: 'On orders over $99', color: 'from-purple-500 to-indigo-600' },
+    { icon: RefreshCw, label: 'Easy Returns', sub: '30-day hassle-free', color: 'from-pink-500 to-rose-600' },
+    { icon: Award, label: 'Premium Quality', sub: 'Artisan crafted', color: 'from-amber-500 to-orange-600' },
+    { icon: ShieldCheck, label: 'Secure Payment', sub: '100% protected', color: 'from-emerald-500 to-teal-600' },
+  ];
+
   return (
     <div className="relative overflow-hidden">
-      {/* Hero Section */}
-      <section ref={heroRef} className="relative min-h-[100svh] flex items-center overflow-hidden theme-transition">
-        {/* Theme-aware background */}
-        <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-[#050505]' : 'bg-[#f8f7ff]'}`} />
+      {/* Premium Full-bleed Hero Section */}
+      <section ref={heroRef} className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden theme-transition bg-black">
         
-        {/* Premium Background Elements */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-           <div className={`absolute top-0 right-0 w-[300px] sm:w-[800px] h-[300px] sm:h-[800px] rounded-full blur-[80px] sm:blur-[150px] opacity-15 ${theme === 'dark' ? 'bg-purple-600' : 'bg-purple-200'}`} />
-           <div className={`absolute bottom-0 left-0 w-[200px] sm:w-[600px] h-[200px] sm:h-[600px] rounded-full blur-[60px] sm:blur-[120px] opacity-10 ${theme === 'dark' ? 'bg-blue-600' : 'bg-blue-100'}`} />
-        </div>
+        {/* Cinematic Background Image with slow zoom */}
+        <motion.div
+           initial={{ scale: 1.1 }}
+           animate={{ scale: 1 }}
+           transition={{ duration: 15, ease: "easeOut" }}
+           className="absolute inset-0 z-0"
+        >
+           <img loading="lazy" 
+              src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2500&auto=format&fit=crop" 
+              alt="Premium Fashion Collection" 
+              className="w-full h-full object-cover object-[center_30%]"
+           />
+        </motion.div>
 
-        {/* Sketchfab 3D Model - Shown on all devices. ModelLoader covers it until ready */}
-        <div className="absolute inset-y-0 right-0 w-full lg:w-[60%] z-0">
-          {/* ModelLoader overlay: shows LUXORA logo until 3D model is ready */}
-          <ModelLoader isLoaded={modelLoaded} />
-
-          <SketchfabModel
-            modelId="96340701c2ed4d37851c7d9109eee9c0"
-            onLoad={() => setModelLoaded(true)}
-            theme={theme}
-            className={`w-full h-full transition-opacity duration-[2000ms] ${modelLoaded ? 'opacity-100' : 'opacity-0'}`}
-          />
-          {/* Vignette: desktop only — on mobile it covers the model */}
-          <div className={`absolute inset-0 pointer-events-none hidden lg:block bg-gradient-to-r ${
-            theme === 'dark' ? 'from-[#050505] via-[#050505]/40' : 'from-[#f8f7ff] via-[#f8f7ff]/40'
-          } to-transparent`} />
-        </div>
+        {/* Elegant Gradient Overlay - Ensures high contrast for text */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/40 via-black/20 to-[#0a0a0a]" />
 
         {/* Hero Content */}
-        <div className="relative z-10 w-full px-5 sm:px-8 lg:px-16 xl:px-24 py-24 lg:py-32 pointer-events-none">
-          <div ref={heroContentRef} className="max-w-xl lg:max-w-3xl pointer-events-auto">
-            <motion.div 
-               className="hero-animate relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 mb-6"
-               whileHover={{ scale: 1.05 }}
+        <div className="relative z-10 w-full px-5 sm:px-8 lg:px-16 xl:px-24 flex items-center justify-center text-center mt-20">
+          <div ref={heroContentRef} className="max-w-4xl pointer-events-auto flex flex-col items-center">
+            {/* Minimalist Badge */}
+            <motion.div
+              className="hero-animate relative inline-flex items-center gap-3 px-5 py-2 mb-8 backdrop-blur-md bg-black/30 border border-white/20 rounded-full"
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(0,0,0,0.5)' }}
             >
-               <Sparkles className="w-3 h-3 text-purple-500 animate-pulse" />
-               <span className="text-[9px] font-black tracking-[0.2em] text-purple-600 uppercase">Artisan Selection 2024</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              <span className="text-[10px] sm:text-xs font-black tracking-[0.3em] uppercase text-white">The 2025 Reserve</span>
             </motion.div>
-            
-            <h1 
-              className={`hero-animate relative text-5xl sm:text-7xl lg:text-9xl xl:text-[10rem] font-black leading-[0.85] mb-5 sm:mb-8 ${
-                theme === 'dark' ? 'text-white' : 'text-[#111111]'
-              }`}
-              style={{ 
+
+            <h1
+              className="hero-animate relative leading-[0.85] mb-6 sm:mb-8 text-white drop-shadow-2xl"
+              style={{
                 fontFamily: 'Teko, sans-serif',
-                textShadow: theme === 'dark' ? '0 2px 20px rgba(0,0,0,0.5)' : '0 2px 10px rgba(248,247,255,0.8)'
+                fontSize: 'clamp(4rem, 14vw, 12rem)',
+                fontWeight: 900,
+                WebkitTextStroke: '1px rgba(255,255,255,0.1)',
               }}
             >
-              CRAFTED FOR <br />
-              <span className="text-gradient">UNIQUENESS</span>
+              CRAFTED<br />
+              FOR <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-500">UNIQUENESS</span>
             </h1>
-            
-            <p className={`hero-animate relative text-base sm:text-xl max-w-sm sm:max-w-xl mb-8 sm:mb-12 leading-relaxed font-light ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              At Luxora, every individual is a masterpiece. Discover our premium fashion line.
+
+            <p
+              className="hero-animate relative text-base sm:text-xl lg:text-2xl max-w-2xl mb-10 sm:mb-14 leading-relaxed font-light text-gray-200 drop-shadow-lg"
+            >
+              At Luxora, every individual is a masterpiece. Discover our premium fashion line — where luxury meets identity.
             </p>
-            
-            <div className="hero-animate relative flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-8 items-start sm:items-center">
+
+            <div className="hero-animate relative flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6 items-center justify-center">
               <Link to="/shop" className="w-full sm:w-auto">
                 <Button
                   size="xl"
-                  className="w-full sm:w-auto group bg-purple-600 text-white hover:bg-purple-700 px-8 sm:px-12 py-5 sm:py-8 text-sm font-black tracking-widest uppercase rounded-full transition-all duration-500 shadow-[0_20px_60px_rgba(103,39,170,0.3)] hover:shadow-[0_25px_80px_rgba(103,39,170,0.5)] border-none"
+                  className="w-full sm:w-auto group bg-white text-black hover:bg-gray-100 px-10 sm:px-14 py-6 sm:py-8 text-sm font-black tracking-widest uppercase rounded-full transition-all duration-500 shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
                 >
                   <ShoppingBag className="w-5 h-5 mr-3" />
-                  Explore Studio
+                  Explore Collection
                 </Button>
               </Link>
-              <div className="hidden sm:flex items-center gap-4 text-xs font-black tracking-[0.2em] uppercase text-purple-500 cursor-pointer group">
-                Summer Campaign
-                <div className="w-12 h-[1px] bg-purple-500 group-hover:w-24 transition-all" />
-              </div>
+              <Link to="/about" className="hidden sm:flex items-center gap-3 text-xs font-black tracking-[0.3em] uppercase text-white hover:text-gray-300 transition-colors group px-6">
+                Our Story
+                <div className="w-12 h-[1px] bg-white group-hover:w-24 transition-all duration-300" />
+              </Link>
             </div>
           </div>
         </div>
+        
+        {/* Subtle scroll indicator */}
+        <motion.div 
+           initial={{ opacity: 0 }}
+           animate={{ opacity: 1 }}
+           transition={{ delay: 2, duration: 1 }}
+           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10"
+        >
+           <span className="text-[9px] font-black tracking-[0.4em] text-white/50 uppercase">Scroll</span>
+           <motion.div 
+              animate={{ y: [0, 8, 0] }} 
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className="w-[1px] h-12 bg-gradient-to-b from-white/50 to-transparent" 
+           />
+        </motion.div>
       </section>
+
+      {/* Benefits Bar */}
+      <div className={`relative z-10 ${
+        theme === 'dark' ? 'bg-[#0a0a0a] border-y border-white/5' : 'bg-white border-y border-purple-100'
+      }`}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 xl:px-24 py-5">
+          <div className={`grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-0 divide-y lg:divide-y-0 lg:divide-x ${
+            theme === 'dark' ? 'divide-white/5' : 'divide-purple-100'
+          }`}>
+            {benefits.map(({ icon: Icon, label, sub, color }) => (
+              <motion.div
+                key={label}
+                whileHover={{ y: -2 }}
+                className="flex items-center gap-3 px-4 py-3 lg:py-2"
+              >
+                <div className={`flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shadow-lg`}>
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <div className={`text-sm font-bold tracking-wide ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>{label}</div>
+                  <div className={`text-[11px] ${
+                    theme === 'dark' ? 'text-gray-500' : 'text-gray-400'
+                  }`}>{sub}</div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Scrolling Marquee */}
       <Marquee text="LUXORA MASTERPIECES • FREE GLOBAL SHIPPING • ARTISANAL CRAFTSMANSHIP • 24/7 ELITE CONCIERGE • SECURE BIOMETRIC CHECKOUT" speed={1} />
+
+      {/* 3D Interactive Model Section */}
+      <Suspense fallback={<SectionLoader />}>
+        <InteractiveModel />
+      </Suspense>
 
       {/* Masterpiece Showcase Section */}
       <section className="py-32 px-6 sm:px-8 lg:px-16 xl:px-24">

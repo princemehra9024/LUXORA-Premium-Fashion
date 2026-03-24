@@ -53,7 +53,7 @@ const WishlistPage = () => {
               >
                 <Link to={`/product/${product.id}`}>
                   <div className="aspect-[3/4] overflow-hidden relative">
-                    <img
+                    <img loading="lazy"
                       src={product.image}
                       alt={product.name}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

@@ -110,7 +110,7 @@ const BrandStory = () => {
     >
       {/* Background Image with Parallax */}
       <div className="absolute inset-0">
-        <img
+        <img loading="lazy"
           src="/hero-bg.jpg"
           alt="Brand Background"
           className="w-full h-full object-cover opacity-30"

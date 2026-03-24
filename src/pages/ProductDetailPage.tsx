@@ -147,7 +147,7 @@ const ProductDetailPage = () => {
                            selectedImage === idx ? 'border-purple-600 scale-[0.98]' : 'border-white/5 opacity-50 hover:opacity-100'
                         }`}
                      >
-                        <img src={img} className="w-full h-full object-cover" />
+                        <img loading="lazy" src={img} className="w-full h-full object-cover" />
                         {selectedImage === idx && (
                            <div className="absolute inset-0 bg-purple-600/10" />
                         )}

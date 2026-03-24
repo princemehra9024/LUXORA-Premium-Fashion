@@ -137,7 +137,7 @@ const CustomerReviews = () => {
                   {/* Avatar and Info */}
                   <div className="flex items-center gap-4 mb-6">
                     <div className="relative">
-                      <img
+                      <img loading="lazy"
                         src={review.avatar}
                         alt={review.name}
                         className="w-16 h-16 lg:w-20 lg:h-20 rounded-full object-cover border-2 border-purple-500/50"

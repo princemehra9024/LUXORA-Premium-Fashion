@@ -71,7 +71,7 @@ const ReviewMarquee = () => {
             >
               <div className="flex items-center gap-4 mb-6">
                 <div className="relative">
-                  <img 
+                  <img loading="lazy" 
                     src={review.avatar} 
                     alt={review.name}
                     className="w-14 h-14 rounded-full object-cover border-2 border-purple-500/30"

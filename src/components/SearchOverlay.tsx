@@ -120,7 +120,7 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
                               : 'hover:bg-gray-50'
                           }`}
                         >
-                          <img
+                          <img loading="lazy"
                             src={product.image}
                             alt={product.name}
                             className="w-16 h-16 rounded-lg object-cover"
@@ -165,7 +165,7 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
                           theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-gray-50'
                         }`}
                       >
-                        <img src={product.image} alt={product.name} className="w-16 h-16 rounded-lg object-cover" />
+                        <img loading="lazy" src={product.image} alt={product.name} className="w-16 h-16 rounded-lg object-cover" />
                         <div className="flex-1 min-w-0">
                           <p className="text-xs text-purple-500 mb-0.5">{product.category}</p>
                           <h4 className={`font-medium text-sm truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>

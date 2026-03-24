@@ -35,7 +35,7 @@ const ModelLoader = ({ isLoaded }: ModelLoaderProps) => {
                 : 'bg-white border-purple-100 shadow-purple-100/50'
             }`}
           >
-            <img
+            <img loading="lazy"
               src="/logo.png"
               alt="LUXORA"
               className="w-12 h-12 object-contain"

@@ -98,7 +98,7 @@ const ProductFeatureSlider = ({
           >
             {/* Right Image (Background) - OTHER BRANDS */}
             <div className="absolute inset-0 w-full h-full">
-              <img
+              <img loading="lazy"
                 src={rightImage}
                 alt="Right comparison"
                 className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
@@ -133,7 +133,7 @@ const ProductFeatureSlider = ({
               className="absolute inset-0 w-full h-full"
               style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
             >
-              <img
+              <img loading="lazy"
                 src={leftImage}
                 alt="Left comparison"
                 className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"

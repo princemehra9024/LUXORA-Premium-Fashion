@@ -23,10 +23,10 @@ const SketchfabModel = ({
 
   // Optimized Sketchfab embed URL — all unnecessary UI stripped, max performance params
   const params = new URLSearchParams({
-    autostart: '1',        // Start immediately, don't wait for user click
-    autospin: '0',         // No auto rotation (saves GPU)
+    autostart: '1',           // Start immediately, don't wait for user click
+    autospin: '0',            // No auto rotation (saves GPU)
     ui_theme: theme,
-    ui_controls: '0',      // Hide all controls
+    ui_controls: '1',         // Show basic controls for zoom/pan
     ui_infos: '0',
     ui_inspector: '0',
     ui_stop: '0',
@@ -37,31 +37,37 @@ const SketchfabModel = ({
     ui_fullscreen: '0',
     ui_annotations: '0',
     ui_watermark: '0',
-    transparent: '1',      // Transparent background
+    transparent: '1',         // Transparent background
     camera: '0',
-    preload: '1',          // Preload model data aggressively
-    dnt: '1',              // Do Not Track — removes analytics overhead
-    double_click: '0',     // Disable double click to enter fullscreen
-    scrollwheel: '0',      // Disable scroll wheel zoom (no accidental page hijack)
-    fps_speed: '1',        // Normal speed, less GPU
+    preload: '1',             // Preload model data aggressively
+    dnt: '1',                 // Do Not Track — removes analytics overhead
+    double_click: '1',        // Enable double click to enter fullscreen/center
+    scrollwheel: '1',         // Enable scroll wheel zoom
+
+    fps_speed: '1',           // Normal speed, less GPU
+    max_texture_size: '1024', // Reduce texture memory for faster first paint
+    quality: '55',            // Balanced quality/speed
   });
 
   const embedUrl = `https://sketchfab.com/models/${modelId}/embed?${params.toString()}`;
 
   return (
     <div ref={containerRef} className={`relative w-full h-full ${className}`}>
-      {/* Sketchfab Viewer iframe - Loads immediately on mount for maximum speed */}
+      {/* Sketchfab Viewer iframe — eager loaded, high browser priority */}
       <iframe
         ref={iframeRef}
         title="Interactive 3D Fashion Model"
         src={embedUrl}
         frameBorder="0"
+        // @ts-ignore — non-standard but widely supported fetch-priority hint
+        importance="low"
+        loading="lazy"
         allow="autoplay; fullscreen; xr-spatial-tracking"
         onLoad={() => {
           setLoaded(true);
           if (externalOnLoad) externalOnLoad();
         }}
-        className={`w-full h-full border-0 transition-opacity duration-1000 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`w-full h-full border-0 transition-opacity duration-700 ${loaded ? 'opacity-100' : 'opacity-0'}`}
         style={{ display: 'block' }}
       />
     </div>
