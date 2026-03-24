@@ -44,15 +44,7 @@ const HomePage = () => {
   const { theme } = useTheme();
   const heroRef = useRef<HTMLElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
-  // On mobile devices, check resize
-  const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   // Find special product
   const specialProduct = allProducts.find(p => p.id === 'wd-3');
